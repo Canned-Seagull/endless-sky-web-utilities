@@ -1,6 +1,7 @@
 {
   "version": "5",
   "specifiers": {
+    "npm:@deno/vite-plugin@^1.0.6": "1.0.6_vite@7.3.1__@types+node@20.19.30__picomatch@4.0.3__sass-embedded@1.97.2_@types+node@20.19.30",
     "npm:@eslint/js@^9.14.0": "9.39.2",
     "npm:@quasar/app-vite@^2.1.0": "2.4.0_pinia@3.0.4__typescript@5.9.3__vue@3.5.26___typescript@5.9.3_quasar@2.18.6_typescript@5.9.3_vue@3.5.26__typescript@5.9.3_vue-router@4.6.4__vue@3.5.26___typescript@5.9.3__typescript@5.9.3_@vitejs+plugin-vue@6.0.3__vite@7.3.1___@types+node@20.19.30___sass-embedded@1.97.2___picomatch@4.0.3__vue@3.5.26___typescript@5.9.3__@types+node@20.19.30__sass-embedded@1.97.2__typescript@5.9.3_vite@7.3.1__@types+node@20.19.30__sass-embedded@1.97.2__picomatch@4.0.3_@types+node@20.19.30_sass-embedded@1.97.2",
     "npm:@quasar/extras@^1.16.4": "1.17.0",
@@ -52,6 +53,12 @@
     },
     "@bufbuild/protobuf@2.10.2": {
       "integrity": "sha512-uFsRXwIGyu+r6AMdz+XijIIZJYpoWeYzILt5yZ2d3mCjQrWUTVpVD9WL/jZAbvp+Ed04rOhrsk7FiTcEDseB5A=="
+    },
+    "@deno/vite-plugin@1.0.6_vite@7.3.1__@types+node@20.19.30__picomatch@4.0.3__sass-embedded@1.97.2_@types+node@20.19.30": {
+      "integrity": "sha512-Sh5XqvFuKAwjARTesi0n6xRpEXm1V0UeqKh+SxIrexCofxOaieNDMqXZD02RiZCg0mrJ43V8eCMuVrDfq6mLmg==",
+      "dependencies": [
+        "vite@7.3.1_@types+node@20.19.30_picomatch@4.0.3_sass-embedded@1.97.2"
+      ]
     },
     "@esbuild/aix-ppc64@0.25.12": {
       "integrity": "sha512-Hhmwd6CInZ3dwpuGTF8fJG6yoWmsToE+vYgD4nytZVxcu1ulHpUQRAB1UJ8+N1Am3Mz4+xOByoQoSZf4D+CpkA==",
@@ -592,7 +599,7 @@
         "tinyglobby",
         "ts-essentials",
         "typescript",
-        "vite",
+        "vite@7.3.1_@types+node@20.19.30_sass-embedded@1.97.2_picomatch@4.0.3",
         "vue",
         "vue-router",
         "webpack-merge"
@@ -624,7 +631,7 @@
       "dependencies": [
         "@vitejs/plugin-vue",
         "quasar",
-        "vite",
+        "vite@7.3.1_@types+node@20.19.30_sass-embedded@1.97.2_picomatch@4.0.3",
         "vue"
       ]
     },
@@ -963,7 +970,7 @@
       "integrity": "sha512-TlGPkLFLVOY3T7fZrwdvKpjprR3s4fxRln0ORDo1VQ7HHyxJwTlrjKU3kpVWTlaAjIEuCTokmjkZnr8Tpc925w==",
       "dependencies": [
         "@rolldown/pluginutils",
-        "vite",
+        "vite@7.3.1_@types+node@20.19.30_sass-embedded@1.97.2_picomatch@4.0.3",
         "vue"
       ]
     },
@@ -3350,7 +3357,7 @@
         "tiny-invariant",
         "tinyglobby",
         "typescript",
-        "vite",
+        "vite@7.3.1_@types+node@20.19.30_sass-embedded@1.97.2_picomatch@4.0.3",
         "vscode-uri",
         "vue-tsc"
       ],
@@ -3359,6 +3366,27 @@
         "typescript",
         "vue-tsc"
       ]
+    },
+    "vite@7.3.1_@types+node@20.19.30_picomatch@4.0.3_sass-embedded@1.97.2": {
+      "integrity": "sha512-w+N7Hifpc3gRjZ63vYBXA56dvvRlNWRczTdmCBBa+CotUzAPf5b7YMdMR/8CQoeYE5LX3W4wj6RYTgonm1b9DA==",
+      "dependencies": [
+        "@types/node",
+        "esbuild@0.27.2",
+        "fdir",
+        "picomatch@4.0.3",
+        "postcss",
+        "rollup",
+        "sass-embedded",
+        "tinyglobby"
+      ],
+      "optionalDependencies": [
+        "fsevents"
+      ],
+      "optionalPeers": [
+        "@types/node",
+        "sass-embedded"
+      ],
+      "bin": true
     },
     "vite@7.3.1_@types+node@20.19.30_sass-embedded@1.97.2_picomatch@4.0.3": {
       "integrity": "sha512-w+N7Hifpc3gRjZ63vYBXA56dvvRlNWRczTdmCBBa+CotUzAPf5b7YMdMR/8CQoeYE5LX3W4wj6RYTgonm1b9DA==",
@@ -3522,6 +3550,7 @@
   "workspace": {
     "packageJson": {
       "dependencies": [
+        "npm:@deno/vite-plugin@^1.0.6",
         "npm:@eslint/js@^9.14.0",
         "npm:@quasar/app-vite@^2.1.0",
         "npm:@quasar/extras@^1.16.4",
