@@ -33,6 +33,12 @@ const linksList: NavigationLinkProps[] = [
     icon: 'home',
     link: '/',
   },
+  {
+    title: 'Data',
+    caption: 'Load and view data',
+    icon: 'code',
+    link: '/data',
+  },
 ];
 
 const leftDrawerOpen = ref(false);
