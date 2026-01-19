@@ -1,0 +1,3 @@
+[submodule "endless-sky-data-parser"]
+	path = endless-sky-data-parser
+	url = https://github.com/Canned-Seagull/endless-sky-data-parser
