@@ -3,6 +3,8 @@
 
 import { defineConfig } from '#q-app/wrappers';
 
+import process from 'node:process';
+
 export default defineConfig((/* ctx */) => {
   return {
     // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
@@ -50,7 +52,7 @@ export default defineConfig((/* ctx */) => {
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
-      // publicPath: '/',
+      publicPath: process.env.PUBLIC_PATH ?? '/',
       // analyze: true,
       // env: {},
       // rawDefine: {}
