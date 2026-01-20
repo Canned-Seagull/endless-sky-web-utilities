@@ -5,12 +5,20 @@
         <q-expansion-item icon="code" :label="dataSource?.getName()" caption="Data source">
           <q-card>
             <q-card-section>
-              <q-tree v-if="gameDataLoaded" :nodes="dataSourceFileNodes" node-key="label">
-                <template v-slot:default-body="prop">
-                  <q-expansion-item label="Content">
-                    <pre>{{ prop.node.content }}</pre>
+              <q-tree v-if="dataSourceFileNodes" :nodes="dataSourceFileNodes" node-key="label">
+                <template v-slot:default-header="prop">
+                  <template v-if="!prop.node.content">
+                    <q-icon :name="prop.node.icon" class="q-mr-sm" />
+                    <div>{{ prop.node.label }}</div>
+                  </template>
+                  <q-expansion-item v-else label="Content" class="full-width">
+                    <q-scroll-area class="window-height">
+                      <pre>{{ prop.node.content }}</pre>
+                    </q-scroll-area>
                   </q-expansion-item>
                 </template>
+
+                <!-- <template v-slot:default-body="prop"> </template> -->
               </q-tree>
               <q-skeleton v-else type="rect" />
             </q-card-section>
@@ -73,9 +81,10 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from 'vue';
 
-import { useGameDataStore } from 'src/stores/game_data';
+import { useGameDataStore } from 'src/stores/game_data.ts';
 
-import { GitHubDataSource } from '@cannedseagull/endless-sky-data-parser';
+import { DataFile, GitHubDataSource } from '@cannedseagull/endless-sky-data-parser';
+import type { QTreeNode } from 'quasar';
 
 const gameDataLoading = ref(false);
 const gameDataLoaded = ref(false);
@@ -90,13 +99,61 @@ const dataSource = shallowRef(null);
 const dataSourceFileNodes = computed(() => {
   const ds = gameDataStore.gameData.dataSource;
 
-  if (!ds) return null;
-  return [...ds.dataFiles.entries()].map(([_, dataFile]) => {
-    return {
-      label: dataFile.path,
-      content: dataFile.content,
-    };
+  if (!ds || !gameDataLoaded.value) return null;
+
+  type Directory = Map<string, Directory | DataFile>;
+
+  const rootDir: Directory = new Map();
+
+  function getDirMap(path: string[], parentDir: Directory): Directory {
+    const name = path[0];
+    if (!name) throw new Error('Missing path component');
+
+    if (!parentDir.has(name)) parentDir.set(name, new Map());
+
+    // Assert non-null, as we ensured it was set
+    const dir = parentDir.get(name)!;
+
+    if (dir instanceof DataFile) throw new Error('Directory cannot be a data file');
+
+    if (path.length > 1) return getDirMap(path.slice(1), dir);
+
+    return dir;
+  }
+
+  ds.dataFiles.entries().forEach(([_, dataFile]: [string, DataFile]) => {
+    const path = dataFile.path.split('/');
+    const name = path.at(-1);
+
+    if (!name) throw new Error('File name absent');
+
+    getDirMap(path.slice(0, -1), rootDir).set(name, dataFile);
   });
+
+  function dirToNode(dir: Directory): QTreeNode[] {
+    return Array.from(dir).map(([path, file]) => {
+      if (file instanceof DataFile) {
+        return {
+          label: path,
+          icon: 'code',
+          children: [
+            {
+              label: 'Content',
+              content: file.content,
+            },
+          ],
+        };
+      } else {
+        return {
+          label: path,
+          icon: 'folder',
+          children: dirToNode(file),
+        };
+      }
+    });
+  }
+
+  return dirToNode(rootDir);
 });
 
 async function loadFromGitHub({ owner, repo, ref }: { owner: string; repo: string; ref: string }) {
