@@ -79,10 +79,12 @@
 </template>
 
 <script setup lang="ts">
+import type { ShallowRef } from 'vue';
 import { computed, ref, shallowRef } from 'vue';
 
 import { useGameDataStore } from 'src/stores/game_data.ts';
 
+import type { DataSource } from '@cannedseagull/endless-sky-data-parser';
 import { DataFile, GitHubDataSource } from '@cannedseagull/endless-sky-data-parser';
 import type { QTreeNode } from 'quasar';
 
@@ -95,7 +97,7 @@ const repo = ref('');
 const treeRef = ref('');
 
 const gameDataStore = useGameDataStore();
-const dataSource = shallowRef(null);
+const dataSource: ShallowRef<DataSource | null> = shallowRef(null);
 const dataSourceFileNodes = computed(() => {
   const ds = gameDataStore.gameData.dataSource;
 
