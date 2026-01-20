@@ -42,7 +42,14 @@ export default defineConfig((/* ctx */) => {
       typescript: {
         strict: true,
         vueShim: true,
-        // extendTsConfig (tsConfig) {}
+        extendTsConfig(tsConfig) {
+          if (!tsConfig.compilerOptions) tsConfig.compilerOptions = {};
+          else if (!tsConfig.compilerOptions.paths) tsConfig.compilerOptions.paths = {};
+
+          tsConfig.compilerOptions.paths['@cannedseagull/endless-sky-data-parser'] = [
+            './../endless-sky-data-parser/mod.ts',
+          ];
+        },
       },
 
       vueRouterMode: 'hash', // available values: 'hash', 'history'

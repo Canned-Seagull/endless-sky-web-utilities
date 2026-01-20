@@ -52,6 +52,7 @@ export default defineConfigWithVueTs(
       globals: {
         ...globals.browser,
         ...globals.node, // SSR, Electron, config files
+        Deno: 'readonly',
         process: 'readonly', // process.env.*
         ga: 'readonly', // Google Analytics
         cordova: 'readonly',
