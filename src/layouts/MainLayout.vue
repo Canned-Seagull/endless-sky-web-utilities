@@ -43,6 +43,12 @@ const linksList: NavigationLinkProps[] = [
     icon: 'code',
     link: '/data',
   },
+  {
+    title: 'Outfits',
+    caption: 'View game outfits',
+    icon: 'handyman',
+    link: '/outfits',
+  },
 ];
 
 const leftDrawerOpen = ref(false);
