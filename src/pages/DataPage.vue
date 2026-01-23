@@ -1,32 +1,14 @@
 <template>
   <q-page>
-    <q-card v-if="gameDataLoading" bordered class="q-ma-lg">
-      <q-card-section>
-        <q-expansion-item icon="code" :label="dataSource?.getName()" caption="Data source">
-          <q-card>
-            <q-card-section>
-              <q-tree v-if="dataSourceFileNodes" :nodes="dataSourceFileNodes" node-key="label">
-                <template v-slot:default-header="prop">
-                  <template v-if="!prop.node.content">
-                    <q-icon :name="prop.node.icon" class="q-mr-sm" />
-                    <div>{{ prop.node.label }}</div>
-                  </template>
-                  <q-expansion-item v-else label="Content" class="full-width">
-                    <q-scroll-area class="window-height">
-                      <pre>{{ prop.node.content }}</pre>
-                    </q-scroll-area>
-                  </q-expansion-item>
-                </template>
+    <DataSourceCard
+      v-for="dataSource in gameDataStore.gameData.dataSources"
+      :key="dataSource.name"
+      :dataSource
+    />
 
-                <!-- <template v-slot:default-body="prop"> </template> -->
-              </q-tree>
-              <q-skeleton v-else type="rect" />
-            </q-card-section>
-          </q-card>
-        </q-expansion-item>
-      </q-card-section>
-    </q-card>
-    <div v-else class="absolute-center text-center text-h6">No data loaded yet</div>
+    <div v-if="!gameDataStore.gameData.loaded" class="absolute-center text-center text-h6">
+      No data loaded yet
+    </div>
 
     <q-dialog v-model="loadFromCustomGitHub">
       <q-card width="300px">
@@ -54,7 +36,6 @@
 
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-fab
-        v-if="!gameDataLoading"
         vertical-actions-align="right"
         label-position="left"
         icon="add"
@@ -80,16 +61,14 @@
 
 <script setup lang="ts">
 import type { ShallowRef } from 'vue';
-import { computed, ref, shallowRef } from 'vue';
+import { ref, shallowRef } from 'vue';
 
 import { useGameDataStore } from 'src/stores/game_data.ts';
 
 import type { DataSource } from '@cannedseagull/endless-sky-data-parser';
-import { DataFile, GitHubDataSource } from '@cannedseagull/endless-sky-data-parser';
-import type { QTreeNode } from 'quasar';
+import { GitHubDataSource } from '@cannedseagull/endless-sky-data-parser';
 
-const gameDataLoading = ref(false);
-const gameDataLoaded = ref(false);
+import DataSourceCard from '../components/DataSourceCard.vue';
 
 const loadFromCustomGitHub = ref(false);
 const owner = ref('');
@@ -98,65 +77,6 @@ const treeRef = ref('');
 
 const gameDataStore = useGameDataStore();
 const dataSource: ShallowRef<DataSource | null> = shallowRef(null);
-const dataSourceFileNodes = computed(() => {
-  const ds = gameDataStore.gameData.dataSource;
-
-  if (!ds || !gameDataLoaded.value) return null;
-
-  type Directory = Map<string, Directory | DataFile>;
-
-  const rootDir: Directory = new Map();
-
-  function getDirMap(path: string[], parentDir: Directory): Directory {
-    const name = path[0];
-    if (!name) throw new Error('Missing path component');
-
-    if (!parentDir.has(name)) parentDir.set(name, new Map());
-
-    // Assert non-null, as we ensured it was set
-    const dir = parentDir.get(name)!;
-
-    if (dir instanceof DataFile) throw new Error('Directory cannot be a data file');
-
-    if (path.length > 1) return getDirMap(path.slice(1), dir);
-
-    return dir;
-  }
-
-  ds.dataFiles.entries().forEach(([_, dataFile]: [string, DataFile]) => {
-    const path = dataFile.path.split('/');
-    const name = path.at(-1);
-
-    if (!name) throw new Error('File name absent');
-
-    getDirMap(path.slice(0, -1), rootDir).set(name, dataFile);
-  });
-
-  function dirToNode(dir: Directory): QTreeNode[] {
-    return Array.from(dir).map(([path, file]) => {
-      if (file instanceof DataFile) {
-        return {
-          label: path,
-          icon: 'code',
-          children: [
-            {
-              label: 'Content',
-              content: file.content,
-            },
-          ],
-        };
-      } else {
-        return {
-          label: path,
-          icon: 'folder',
-          children: dirToNode(file),
-        };
-      }
-    });
-  }
-
-  return dirToNode(rootDir);
-});
 
 async function loadFromGitHub({ owner, repo, ref }: { owner: string; repo: string; ref: string }) {
   dataSource.value = new GitHubDataSource({
@@ -165,11 +85,7 @@ async function loadFromGitHub({ owner, repo, ref }: { owner: string; repo: strin
     ref,
   });
 
-  gameDataLoading.value = true;
-
   await gameDataStore.loadDataSource(dataSource.value);
-
-  gameDataLoaded.value = true;
 }
 
 async function onLoadContinuous() {
