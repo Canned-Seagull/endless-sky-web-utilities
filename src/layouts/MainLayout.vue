@@ -44,6 +44,12 @@ const linksList: NavigationLinkProps[] = [
     link: '/data',
   },
   {
+    title: 'Ships',
+    caption: 'View game ships',
+    icon: 'rocket',
+    link: '/ships',
+  },
+  {
     title: 'Outfits',
     caption: 'View game outfits',
     icon: 'handyman',
