@@ -5,6 +5,13 @@
         <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title> Endless Sky Web Utilities </q-toolbar-title>
+
+        <q-btn
+          flat
+          round
+          @click="$q.dark.toggle()"
+          :icon="$q.dark.isActive ? 'dark_mode' : 'light_mode'"
+        />
       </q-toolbar>
     </q-header>
 
