@@ -15,6 +15,9 @@
               height="256px"
               fit="contain"
             />
+            <div class="q-ma-md">
+              {{ outfit.description }}
+            </div>
             <q-table
               flat
               :rows="informationRows"
