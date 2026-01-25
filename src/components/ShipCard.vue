@@ -24,9 +24,6 @@
             </q-scroll-area>
           </q-tab-panel>
         </q-tab-panels>
-        <q-card>
-          <q-card-section> </q-card-section>
-        </q-card>
       </q-expansion-item>
     </q-card-section>
   </q-card>
