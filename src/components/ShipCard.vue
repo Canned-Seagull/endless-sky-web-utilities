@@ -3,18 +3,34 @@
     <q-card-section>
       <q-expansion-item icon="rocket" :label="ship.name">
         <q-tabs v-model="panel" align="left" no-caps inline-label>
-          <q-tab name="stats" icon="assessment" label="Stats" />
+          <q-tab name="information" icon="query_stats" label="Information" />
+          <q-tab name="raw-stats" icon="analytics" label="Raw Stats" />
           <q-tab name="data" icon="code" label="Data" />
         </q-tabs>
         <q-tab-panels v-model="panel" animated>
-          <q-tab-panel name="stats">
+          <q-tab-panel name="information">
             <q-img
               v-if="ship.thumbnail"
               :src="gameDataStore.gameData.sprites.get(ship.thumbnail)?.url"
               height="256px"
               fit="contain"
             />
-            <q-table title="Attributes" :rows :columns />
+            <q-table
+              flat
+              :rows="informationRows"
+              :columns="informationColumns"
+              hide-header
+              separator="none"
+              virtual-scroll
+              :pagination="{
+                rowsPerPage: 0,
+              }"
+              :rows-per-page-options="[0]"
+              style="height: 400px"
+            />
+          </q-tab-panel>
+          <q-tab-panel name="raw-stats">
+            <q-table title="Attributes" :rows="attributesRows" :columns="attributesColumns" />
           </q-tab-panel>
           <q-tab-panel name="data">
             <q-scroll-area class="window-height">
@@ -46,9 +62,50 @@ const { ship } = defineProps<ShipCardProps>();
 
 const gameDataStore = useGameDataStore();
 
-const panel = ref('stats');
+const panel = ref('information');
 
-const columns: QTableProps['columns'] = [
+const informationColumns: QTableProps['columns'] = [
+  {
+    name: 'attribute',
+    label: 'Attribute',
+    field: 'attribute',
+    required: true,
+    align: 'left',
+  },
+  {
+    name: 'value',
+    label: 'Value',
+    field: 'value',
+    required: true,
+    align: 'left',
+  },
+];
+
+const informationRows: {
+  attribute: string;
+  value: string;
+}[] = [
+  {
+    attribute: 'cost',
+    value: String(ship.attributes.attributes.get('cost') || 'free'),
+  },
+  {
+    attribute: 'mass',
+    value: String(ship.attributes.attributes.get('mass') ?? 0),
+  },
+  // Everything else
+  ...ship.attributes.attributes
+    .entries()
+    .filter(([attribute]) => attribute !== 'cost' && attribute !== 'mass')
+    .map(([attribute, value]) => {
+      return {
+        attribute,
+        value: String(value),
+      };
+    }),
+];
+
+const attributesColumns: QTableProps['columns'] = [
   {
     name: 'attribute',
     label: 'Attribute',
@@ -66,7 +123,9 @@ const columns: QTableProps['columns'] = [
   },
 ];
 
-const rows = Array.from(ship.attributes.attributes.entries()).map(([attribute, value]) => {
-  return { attribute, value };
-});
+const attributesRows = Array.from(ship.attributes.attributes.entries()).map(
+  ([attribute, value]) => {
+    return { attribute, value };
+  },
+);
 </script>
