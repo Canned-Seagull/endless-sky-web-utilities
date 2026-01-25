@@ -9,28 +9,34 @@
         </q-tabs>
         <q-tab-panels v-model="panel" animated>
           <q-tab-panel name="information">
-            <q-img
-              v-if="outfit.thumbnail"
-              :src="gameDataStore.gameData.sprites.get(outfit.thumbnail)?.url"
-              height="256px"
-              fit="contain"
-            />
-            <div class="q-ma-md">
-              {{ outfit.description }}
-            </div>
-            <q-table
-              flat
-              :rows="informationRows"
-              :columns="informationColumns"
-              hide-header
-              separator="none"
-              virtual-scroll
-              :pagination="{
-                rowsPerPage: 0,
-              }"
-              :rows-per-page-options="[0]"
-              style="height: 400px"
-            />
+            <q-splitter v-model="informationSplitterModel" style="height: 400px">
+              <template v-slot:before>
+                <q-img
+                  v-if="outfit.thumbnail"
+                  :src="gameDataStore.gameData.sprites.get(outfit.thumbnail)?.url"
+                  height="256px"
+                  fit="contain"
+                />
+                <div class="q-ma-md">
+                  {{ outfit.description }}
+                </div>
+              </template>
+              <template v-slot:after>
+                <q-table
+                  flat
+                  :rows="informationRows"
+                  :columns="informationColumns"
+                  hide-header
+                  separator="none"
+                  virtual-scroll
+                  :pagination="{
+                    rowsPerPage: 0,
+                  }"
+                  :rows-per-page-options="[0]"
+                  style="height: 400px"
+                />
+              </template>
+            </q-splitter>
           </q-tab-panel>
           <q-tab-panel name="raw-stats">
             <q-table title="Attributes" :rows="attributeRows" :columns="attributeColumns" />
@@ -66,6 +72,7 @@ const { outfit } = defineProps<OutfitCardProps>();
 const gameDataStore = useGameDataStore();
 
 const panel = ref('information');
+const informationSplitterModel = ref(50);
 
 function attributeIsRequirementBonus(attribute: string, value: number): boolean {
   return (
