@@ -3,18 +3,34 @@
     <q-card-section>
       <q-expansion-item icon="handyman" :label="outfit.displayName ?? outfit.name">
         <q-tabs v-model="panel" align="left" no-caps inline-label>
-          <q-tab name="stats" icon="assessment" label="Stats" />
+          <q-tab name="information" icon="query_stats" label="Information" />
+          <q-tab name="raw-stats" icon="analytics" label="Raw Stats" />
           <q-tab name="data" icon="code" label="Data" />
         </q-tabs>
         <q-tab-panels v-model="panel" animated>
-          <q-tab-panel name="stats">
+          <q-tab-panel name="information">
             <q-img
               v-if="outfit.thumbnail"
               :src="gameDataStore.gameData.sprites.get(outfit.thumbnail)?.url"
               height="256px"
               fit="contain"
             />
-            <q-table title="Attributes" :rows :columns />
+            <q-table
+              flat
+              :rows="informationRows"
+              :columns="informationColumns"
+              hide-header
+              separator="none"
+              virtual-scroll
+              :pagination="{
+                rowsPerPage: 0,
+              }"
+              :rows-per-page-options="[0]"
+              style="height: 400px"
+            />
+          </q-tab-panel>
+          <q-tab-panel name="raw-stats">
+            <q-table title="Attributes" :rows="attributeRows" :columns="attributeColumns" />
           </q-tab-panel>
           <q-tab-panel name="data">
             <q-scroll-area class="window-height">
@@ -46,9 +62,126 @@ const { outfit } = defineProps<OutfitCardProps>();
 
 const gameDataStore = useGameDataStore();
 
-const panel = ref('stats');
+const panel = ref('information');
 
-const columns: QTableProps['columns'] = [
+function attributeIsRequirementBonus(attribute: string, value: number): boolean {
+  return (
+    (attribute === 'outfit space' ||
+      attribute === 'weapon capacity' ||
+      attribute === 'engine capacity' ||
+      attribute === 'gun ports' ||
+      attribute === 'turret mounts') &&
+    value > 0
+  );
+}
+
+function attributeIsRequirement(attribute: string, value: number): boolean {
+  return (
+    value < 0 &&
+    attribute !== 'automaton' &&
+    attribute !== 'shield protection' &&
+    attribute !== 'hull protection' &&
+    attribute !== 'energy protection' &&
+    attribute !== 'fuel protection' &&
+    attribute !== 'heat protection' &&
+    attribute !== 'piercing protection' &&
+    attribute !== 'force protection' &&
+    attribute !== 'discharge protection' &&
+    attribute !== 'drag protection' &&
+    attribute !== 'corrosion protection' &&
+    attribute !== 'inertia protection' &&
+    attribute !== 'ion protection' &&
+    attribute !== 'scramble protection' &&
+    attribute !== 'leak protection' &&
+    attribute !== 'burn protection' &&
+    attribute !== 'disruption protection' &&
+    attribute !== 'slowing protection' &&
+    attribute !== 'hull multiplier' &&
+    attribute !== 'hull repair multiplier' &&
+    attribute !== 'hull energy multiplier' &&
+    attribute !== 'hull fuel multiplier' &&
+    attribute !== 'hull heat multiplier' &&
+    attribute !== 'cloaked repair multiplier' &&
+    attribute !== 'shield multiplier' &&
+    attribute !== 'shield generation multiplier' &&
+    attribute !== 'shield energy multiplier' &&
+    attribute !== 'shield fuel multiplier' &&
+    attribute !== 'shield heat multiplier' &&
+    attribute !== 'cloaked regen multiplier' &&
+    attribute !== 'acceleration multiplier' &&
+    attribute !== 'turn multiplier' &&
+    attribute !== 'turret turn multiplier'
+  );
+}
+
+const informationColumns: QTableProps['columns'] = [
+  {
+    name: 'attribute',
+    label: 'Attribute',
+    field: 'attribute',
+    required: true,
+    align: 'left',
+  },
+  {
+    name: 'value',
+    label: 'Value',
+    field: 'value',
+    required: true,
+    align: 'left',
+  },
+];
+
+const informationRows: {
+  attribute: string;
+  value: string;
+}[] = [
+  {
+    attribute: 'cost',
+    value: String(outfit.attributes.get('cost') || 'free'),
+  },
+  {
+    attribute: 'mass',
+    value: String(outfit.attributes.get('mass') ?? 0),
+  },
+  // Attributes that can be both a requirement and a bonus
+  ...outfit.attributes
+    .entries()
+    .filter(([attribute, value]) => attributeIsRequirementBonus(attribute, value))
+    .map(([attribute, value]) => {
+      return {
+        attribute: `${attribute} added`,
+        value: String(value),
+      };
+    }),
+  // Requirements
+  ...outfit.attributes
+    .entries()
+    .filter(([attribute, value]) => attributeIsRequirement(attribute, value))
+    .map(([attribute, value]) => {
+      return {
+        attribute: `${attribute} needed`,
+        value: String(-value),
+      };
+    }),
+  // Everything else
+  ...outfit.attributes
+    .entries()
+    .filter(
+      ([attribute, value]) =>
+        attribute !== 'cost' &&
+        attribute !== 'mass' &&
+        !attributeIsRequirementBonus(attribute, value) &&
+        !attributeIsRequirement(attribute, value),
+    )
+    .map(([attribute, value]) => {
+      return {
+        attribute,
+        value: String(value),
+      };
+    }),
+];
+
+const attributeColumns: QTableProps['columns'] = [
   {
     name: 'attribute',
     label: 'Attribute',
@@ -66,7 +199,7 @@ const columns: QTableProps['columns'] = [
   },
 ];
 
-const rows = Array.from(outfit.attributes.entries()).map(([attribute, value]) => {
+const attributeRows = Array.from(outfit.attributes.entries()).map(([attribute, value]) => {
   return { attribute, value };
 });
 </script>
