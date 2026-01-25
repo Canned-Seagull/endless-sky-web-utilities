@@ -8,6 +8,12 @@
         </q-tabs>
         <q-tab-panels v-model="panel" animated>
           <q-tab-panel name="stats">
+            <q-img
+              v-if="ship.thumbnail"
+              :src="gameDataStore.gameData.sprites.get(ship.thumbnail)?.url"
+              height="256px"
+              fit="contain"
+            />
             <q-table title="Attributes" :rows :columns />
           </q-tab-panel>
           <q-tab-panel name="data">
@@ -33,11 +39,15 @@ import type { QTableProps } from 'quasar';
 import type { Ship } from '@cannedseagull/endless-sky-data-parser';
 import { serialiseDataNode } from '@cannedseagull/endless-sky-data-parser';
 
+import { useGameDataStore } from '../stores/game_data.ts';
+
 export interface ShipCardProps {
   ship: Ship;
 }
 
 const { ship } = defineProps<ShipCardProps>();
+
+const gameDataStore = useGameDataStore();
 
 const panel = ref('stats');
 
