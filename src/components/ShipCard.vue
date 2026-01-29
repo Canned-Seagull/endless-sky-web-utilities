@@ -96,6 +96,10 @@ const informationRows: {
   value: string;
 }[] = [
   {
+    attribute: 'category',
+    value: ship.attributes.category ?? 'None',
+  },
+  {
     attribute: 'cost',
     value: String(ship.attributes.attributes.get('cost') || 'free'),
   },
