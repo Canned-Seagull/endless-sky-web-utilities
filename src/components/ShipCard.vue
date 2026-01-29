@@ -100,6 +100,10 @@ const informationRows: {
     value: ship.attributes.category ?? 'None',
   },
   {
+    attribute: 'licenses',
+    value: ship.attributes.licenses.length ? ship.attributes.licenses.join(', ') : 'None',
+  },
+  {
     attribute: 'cost',
     value: String(ship.attributes.attributes.get('cost') || 'free'),
   },
