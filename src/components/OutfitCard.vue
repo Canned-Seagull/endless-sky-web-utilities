@@ -150,6 +150,10 @@ const informationRows: {
     value: outfit.category ?? 'None',
   },
   {
+    attribute: 'licenses',
+    value: outfit.licenses.length ? outfit.licenses.join(', ') : 'None',
+  },
+  {
     attribute: 'cost',
     value: String(outfit.attributes.get('cost') || 'free'),
   },
