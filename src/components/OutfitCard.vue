@@ -146,6 +146,10 @@ const informationRows: {
   value: string;
 }[] = [
   {
+    attribute: 'category',
+    value: outfit.category ?? 'None',
+  },
+  {
     attribute: 'cost',
     value: String(outfit.attributes.get('cost') || 'free'),
   },
