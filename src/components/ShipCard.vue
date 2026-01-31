@@ -13,7 +13,7 @@
               <template v-slot:before>
                 <q-img
                   v-if="ship.thumbnail"
-                  :src="gameDataStore.gameData.sprites.get(ship.thumbnail)?.url"
+                  :src="gameDataStore.gameData.sprites.get(ship.thumbnail)?.mainImage.url"
                   height="256px"
                   fit="contain"
                 />

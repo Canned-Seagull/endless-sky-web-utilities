@@ -13,7 +13,7 @@
               <template v-slot:before>
                 <q-img
                   v-if="outfit.thumbnail"
-                  :src="gameDataStore.gameData.sprites.get(outfit.thumbnail)?.url"
+                  :src="gameDataStore.gameData.sprites.get(outfit.thumbnail)?.mainImage.url"
                   height="256px"
                   fit="contain"
                 />
