@@ -1,20 +1,25 @@
 <template>
   <q-page>
-    <OutfitCard
-      v-for="outfit in Array.from(gameDataStore.gameData.outfits.values())
-        .filter((outfit) => outfit.isInitialised)
-        .sort((a, b) => {
-          const aName = a.name ?? '';
-          const bName = b.name ?? '';
+    <div class="q-ma-lg">
+      <div
+        v-for="outfit in Array.from(gameDataStore.gameData.outfits.values())
+          .filter((outfit) => outfit.isInitialised)
+          .sort((a, b) => {
+            const aName = a.name ?? '';
+            const bName = b.name ?? '';
 
-          if (aName < bName) return -1;
-          else if (aName > bName) return 1;
+            if (aName < bName) return -1;
+            else if (aName > bName) return 1;
 
-          return 0;
-        })"
-      :key="outfit.name ?? ''"
-      :outfit
-    />
+            return 0;
+          })"
+        :key="outfit.name ?? ''"
+        :outfit
+        class="q-my-md"
+      >
+        <OutfitCard :outfit />
+      </div>
+    </div>
 
     <div
       v-if="gameDataStore.gameData.outfits.size === 0"
