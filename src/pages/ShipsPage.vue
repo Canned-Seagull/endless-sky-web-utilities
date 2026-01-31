@@ -1,9 +1,12 @@
 <template>
   <q-page>
     <div class="q-ma-lg">
+      <q-input v-model="searchName" type="search" label="Search" />
+
       <div
         v-for="ship in Array.from(gameDataStore.gameData.ships.values())
           .filter((ship) => ship.isInitialised)
+          .filter((ship) => ship.name?.toLowerCase().includes(searchName.toLowerCase()))
           .sort((a, b) => {
             if (a.name < b.name) return -1;
             else if (a.name > b.name) return 1;
@@ -24,9 +27,13 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
+
 import { useGameDataStore } from '../stores/game_data.ts';
 
 import ShipCard from '../components/ShipCard.vue';
 
 const gameDataStore = useGameDataStore();
+
+const searchName = ref('');
 </script>
