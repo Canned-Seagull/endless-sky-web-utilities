@@ -1,5 +1,5 @@
 <template>
-  <q-card bordered class="q-ma-lg">
+  <q-card bordered>
     <q-card-section>
       <q-expansion-item icon="rocket" :label="ship.name">
         <q-tabs v-model="panel" align="left" no-caps inline-label>
