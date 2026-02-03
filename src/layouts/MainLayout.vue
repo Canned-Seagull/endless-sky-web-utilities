@@ -62,6 +62,12 @@ const linksList: NavigationLinkProps[] = [
     icon: 'handyman',
     link: '/outfits',
   },
+  {
+    title: 'Sprite Animator',
+    caption: 'Animate sprites',
+    icon: 'image',
+    link: '/sprite-animator',
+  },
 ];
 
 const leftDrawerOpen = ref(false);
