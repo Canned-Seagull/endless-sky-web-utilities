@@ -68,7 +68,7 @@ import { useGameDataStore } from 'src/stores/game_data.ts';
 import type { DataSource } from '@cannedseagull/endless-sky-data-parser';
 import { GitHubDataSource } from '@cannedseagull/endless-sky-data-parser';
 
-import DataSourceCard from '../components/DataSourceCard.vue';
+import DataSourceCard from 'src/components/DataSourceCard.vue';
 
 const loadFromCustomGitHub = ref(false);
 const owner = ref('');
