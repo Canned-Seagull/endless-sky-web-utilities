@@ -7,7 +7,7 @@
             <ShipPicker
               @select="
                 (ship) => {
-                  if (!ships.find((other) => other.name === ship.name)) ships.push(ship);
+                  if (!ships.find((other) => other.name === ship.name)) pushShips(ship);
 
                   activeTab = ship.name;
                 }
@@ -27,16 +27,16 @@
 </template>
 
 <script setup lang="ts">
-import type { Ref } from 'vue';
 import { ref } from 'vue';
-
-import type { Ship } from '@cannedseagull/endless-sky-data-parser';
 
 import ShipPicker from 'src/components/ShipPicker.vue';
 import ShipsTabbedViewer from 'src/components/ShipsTabbedViewer.vue';
 
+import { useShipArray } from 'src/components/ship_array.ts';
+
+const [ships, pushShips] = useShipArray();
+
 const splitterModel = ref(33);
 
-const ships: Ref<Ship[]> = ref([]);
 const activeTab = ref('');
 </script>
