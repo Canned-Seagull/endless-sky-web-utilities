@@ -1,53 +1,55 @@
 <template>
-  <q-card flat>
+  <q-card bordered>
     <q-card-section>
-      <q-tabs v-model="panel" align="left" no-caps inline-label>
-        <q-tab name="information" icon="query_stats" label="Information" />
-        <q-tab name="raw-stats" icon="analytics" label="Raw Stats" />
-        <q-tab name="data" icon="code" label="Data" />
-      </q-tabs>
-      <q-tab-panels v-model="panel" animated>
-        <q-tab-panel name="information">
-          <q-splitter v-model="informationSplitterModel" style="height: 400px">
-            <template v-slot:before>
-              <q-img
-                v-if="ship.thumbnail"
-                :src="gameDataStore.gameData.sprites.get(ship.thumbnail)?.mainImage.url"
-                height="256px"
-                fit="contain"
-              />
-              <div class="q-ma-md">
-                {{ ship.description }}
-              </div>
-            </template>
-            <template v-slot:after>
-              <q-table
-                flat
-                :rows="informationRows"
-                :columns="informationColumns"
-                hide-header
-                separator="none"
-                virtual-scroll
-                :pagination="{
-                  rowsPerPage: 0,
-                }"
-                :rows-per-page-options="[0]"
-                style="height: 400px"
-              />
-            </template>
-          </q-splitter>
-        </q-tab-panel>
-        <q-tab-panel name="raw-stats">
-          <q-table title="Attributes" :rows="attributesRows" :columns="attributesColumns" />
-        </q-tab-panel>
-        <q-tab-panel name="data">
-          <q-scroll-area class="window-height">
-            <pre>{{
-              ship.dataNodes.map((dataNode) => serialiseDataNode(dataNode)).join('\n\n')
-            }}</pre>
-          </q-scroll-area>
-        </q-tab-panel>
-      </q-tab-panels>
+      <q-expansion-item icon="rocket" :label="ship.name">
+        <q-tabs v-model="panel" align="left" no-caps inline-label>
+          <q-tab name="information" icon="query_stats" label="Information" />
+          <q-tab name="raw-stats" icon="analytics" label="Raw Stats" />
+          <q-tab name="data" icon="code" label="Data" />
+        </q-tabs>
+        <q-tab-panels v-model="panel" animated>
+          <q-tab-panel name="information">
+            <q-splitter v-model="informationSplitterModel" style="height: 400px">
+              <template v-slot:before>
+                <q-img
+                  v-if="ship.thumbnail"
+                  :src="gameDataStore.gameData.sprites.get(ship.thumbnail)?.mainImage.url"
+                  height="256px"
+                  fit="contain"
+                />
+                <div class="q-ma-md">
+                  {{ ship.description }}
+                </div>
+              </template>
+              <template v-slot:after>
+                <q-table
+                  flat
+                  :rows="informationRows"
+                  :columns="informationColumns"
+                  hide-header
+                  separator="none"
+                  virtual-scroll
+                  :pagination="{
+                    rowsPerPage: 0,
+                  }"
+                  :rows-per-page-options="[0]"
+                  style="height: 400px"
+                />
+              </template>
+            </q-splitter>
+          </q-tab-panel>
+          <q-tab-panel name="raw-stats">
+            <q-table title="Attributes" :rows="attributesRows" :columns="attributesColumns" />
+          </q-tab-panel>
+          <q-tab-panel name="data">
+            <q-scroll-area class="window-height">
+              <pre>{{
+                ship.dataNodes.map((dataNode) => serialiseDataNode(dataNode)).join('\n\n')
+              }}</pre>
+            </q-scroll-area>
+          </q-tab-panel>
+        </q-tab-panels>
+      </q-expansion-item>
     </q-card-section>
   </q-card>
 </template>
@@ -59,7 +61,7 @@ import type { QTableProps } from 'quasar';
 import type { Ship } from '@cannedseagull/endless-sky-data-parser';
 import { serialiseDataNode } from '@cannedseagull/endless-sky-data-parser';
 
-import { useGameDataStore } from 'src/stores/game_data.ts';
+import { useGameDataStore } from '../stores/game_data.ts';
 
 export interface ShipCardProps {
   ship: Ship;

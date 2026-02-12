@@ -44,9 +44,7 @@ export default defineConfig((/* ctx */) => {
         vueShim: true,
         extendTsConfig(tsConfig) {
           if (!tsConfig.compilerOptions) tsConfig.compilerOptions = {};
-          else if (!tsConfig.compilerOptions.paths) {
-            tsConfig.compilerOptions.paths = {};
-          }
+          else if (!tsConfig.compilerOptions.paths) tsConfig.compilerOptions.paths = {};
 
           tsConfig.compilerOptions.paths['@cannedseagull/endless-sky-data-parser'] = [
             './../endless-sky-data-parser/mod.ts',

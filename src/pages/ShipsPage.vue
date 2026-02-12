@@ -1,42 +1,39 @@
 <template>
   <q-page>
-    <div class="q-pa-lg" style="height: calc(100vh - 50px)">
-      <q-splitter v-model="splitterModel" class="full-height">
-        <template v-slot:before>
-          <div class="q-pa-md full-height">
-            <ShipPicker
-              @select="
-                (ship) => {
-                  if (!ships.find((other) => other.name === ship.name)) ships.push(ship);
+    <div class="q-ma-lg">
+      <q-input v-model="searchName" type="search" label="Search" />
 
-                  activeTab = ship.name;
-                }
-              "
-            />
-          </div>
-        </template>
+      <div
+        v-for="ship in Array.from(gameDataStore.gameData.ships.values())
+          .filter((ship) => ship.isInitialised)
+          .filter((ship) => ship.name?.toLowerCase().includes(searchName.toLowerCase()))
+          .sort((a, b) => {
+            if (a.name < b.name) return -1;
+            else if (a.name > b.name) return 1;
 
-        <template v-slot:after>
-          <div class="q-pa-md">
-            <ShipsTabbedViewer v-model:ships="ships" v-model:tab="activeTab" />
-          </div>
-        </template>
-      </q-splitter>
+            return 0;
+          })"
+        :key="ship.name"
+        class="q-my-md"
+      >
+        <ShipCard :ship />
+      </div>
+    </div>
+
+    <div v-if="gameDataStore.gameData.ships.size === 0" class="absolute-center text-center text-h6">
+      No ships loaded yet
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import type { Ref } from 'vue';
 import { ref } from 'vue';
 
-import type { Ship } from '@cannedseagull/endless-sky-data-parser';
+import { useGameDataStore } from '../stores/game_data.ts';
 
-import ShipPicker from 'src/components/ShipPicker.vue';
-import ShipsTabbedViewer from 'src/components/ShipsTabbedViewer.vue';
+import ShipCard from '../components/ShipCard.vue';
 
-const splitterModel = ref(33);
+const gameDataStore = useGameDataStore();
 
-const ships: Ref<Ship[]> = ref([]);
-const activeTab = ref('');
+const searchName = ref('');
 </script>
