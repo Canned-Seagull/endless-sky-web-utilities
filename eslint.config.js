@@ -17,10 +17,8 @@ export default defineConfigWithVueTs(
      */
     // ignores: []
   },
-
   pluginQuasar.configs.recommended(),
   js.configs.recommended,
-
   /**
    * https://eslint.vuejs.org
    *
@@ -34,16 +32,19 @@ export default defineConfigWithVueTs(
    *   -> Above, plus rules to enforce subjective community defaults to ensure consistency.
    */
   pluginVue.configs['flat/essential'],
-
   {
     files: ['**/*.ts', '**/*.vue'],
     rules: {
-      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        {
+          prefer: 'type-imports',
+        },
+      ],
     },
   },
   // https://github.com/vuejs/eslint-config-typescript
   vueTsConfigs.recommendedTypeChecked,
-
   {
     languageOptions: {
       ecmaVersion: 'latest',
@@ -84,7 +85,6 @@ export default defineConfigWithVueTs(
       ],
     },
   },
-
   {
     files: ['src-pwa/custom-service-worker.ts'],
     languageOptions: {
@@ -93,6 +93,5 @@ export default defineConfigWithVueTs(
       },
     },
   },
-
   prettierSkipFormatting,
 );

@@ -24,7 +24,12 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/sprite-animator',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/SpriteAnimatorPage.vue') }],
+    children: [
+      {
+        path: '',
+        component: () => import('pages/SpriteAnimatorPage.vue'),
+      },
+    ],
   },
 
   // Always leave this as last one,

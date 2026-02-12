@@ -31,9 +31,9 @@
 </template>
 
 <script setup lang="ts">
-import { useGameDataStore } from '../stores/game_data.ts';
+import { useGameDataStore } from 'src/stores/game_data.ts';
 
-import OutfitCard from '../components/OutfitCard.vue';
+import OutfitCard from 'src/components/OutfitCard.vue';
 
 const gameDataStore = useGameDataStore();
 </script>

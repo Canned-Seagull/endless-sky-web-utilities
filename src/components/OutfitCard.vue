@@ -61,7 +61,7 @@ import type { QTableProps } from 'quasar';
 import type { Outfit } from '@cannedseagull/endless-sky-data-parser';
 import { serialiseDataNode } from '@cannedseagull/endless-sky-data-parser';
 
-import { useGameDataStore } from '../stores/game_data.ts';
+import { useGameDataStore } from 'src/stores/game_data.ts';
 
 export interface OutfitCardProps {
   outfit: Outfit;
