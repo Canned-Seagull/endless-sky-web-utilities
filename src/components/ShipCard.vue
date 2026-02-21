@@ -3,6 +3,7 @@
     <q-card-section>
       <q-tabs v-model="panel" align="left" no-caps inline-label>
         <q-tab name="information" icon="query_stats" label="Information" />
+        <q-tab name="outfits" icon="handyman" label="Outfits" />
         <q-tab name="raw-stats" icon="analytics" label="Raw Stats" />
         <q-tab name="data" icon="code" label="Data" />
       </q-tabs>
@@ -36,6 +37,20 @@
               />
             </template>
           </q-splitter>
+        </q-tab-panel>
+        <q-tab-panel name="outfits">
+          <q-table
+            flat
+            :rows="outfitRows"
+            :columns="outfitColumns"
+            hide-header
+            virtual-scroll
+            :pagination="{
+              rowsPerPage: 0,
+            }"
+            :rows-per-page-options="[0]"
+            style="height: 400px"
+          />
         </q-tab-panel>
         <q-tab-panel name="raw-stats">
           <q-table title="Attributes" :rows="attributesRows" :columns="attributesColumns" />
@@ -120,6 +135,30 @@ const informationRows: {
       };
     }),
 ];
+
+const outfitColumns: QTableProps['columns'] = [
+  {
+    name: 'outfit',
+    label: 'Outfit',
+    field: 'outfit',
+    required: true,
+    align: 'left',
+  },
+  {
+    name: 'count',
+    label: 'Count',
+    field: 'count',
+    required: true,
+    align: 'left',
+  },
+];
+
+const outfitRows: {
+  outfit: string;
+  count: number;
+}[] = [...ship.outfits].map(([outfit, count]) => {
+  return { outfit, count };
+});
 
 const attributesColumns: QTableProps['columns'] = [
   {
