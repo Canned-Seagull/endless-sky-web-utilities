@@ -1,5 +1,5 @@
 <template>
-  <div v-if="outfits.length">
+  <template v-if="outfits.length">
     <q-tabs
       v-model="activeTab"
       dense
@@ -26,12 +26,12 @@
 
     <q-separator />
 
-    <q-tab-panels v-model="activeTab">
+    <q-tab-panels v-model="activeTab" class="full-height">
       <q-tab-panel v-for="outfit in outfits" :key="outfit.name ?? ''" :name="outfit.name">
         <OutfitCard :outfit />
       </q-tab-panel>
     </q-tab-panels>
-  </div>
+  </template>
   <div v-else class="absolute-center text-center text-h6">No outfits opened yet</div>
 </template>
 
