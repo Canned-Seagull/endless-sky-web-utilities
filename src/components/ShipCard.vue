@@ -49,7 +49,7 @@
               rowsPerPage: 0,
             }"
             :rows-per-page-options="[0]"
-            style="height: 400px"
+            class="full-height"
           />
         </q-tab-panel>
         <q-tab-panel name="raw-stats">
