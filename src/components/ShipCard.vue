@@ -66,6 +66,13 @@
         <q-tab-panel name="variants">
           <q-table
             v-if="variantRows.length"
+            @row-click="
+              (_, { variantName }) => {
+                shipsPageStore.openShipName(variantName);
+                shipsPageStore.activeTab = variantName;
+                router.push('/ships');
+              }
+            "
             flat
             :rows="variantRows"
             :columns="variantColumns"
@@ -104,6 +111,7 @@ import { serialiseDataNode } from '@cannedseagull/endless-sky-data-parser';
 
 import { useGameDataStore } from 'src/stores/game_data.ts';
 import { useOutfitsPageStore } from 'src/stores/outfits_page.ts';
+import { useShipsPageStore } from 'src/stores/ships_page.ts';
 
 export interface ShipCardProps {
   ship: Ship;
@@ -115,6 +123,7 @@ const router = useRouter();
 
 const gameDataStore = useGameDataStore();
 const outfitsPageStore = useOutfitsPageStore();
+const shipsPageStore = useShipsPageStore();
 
 const panel = ref('information');
 const informationSplitterModel = ref(50);
@@ -196,18 +205,18 @@ const variantColumns: QTableProps['columns'] = [
   {
     name: 'variant',
     label: 'Variant',
-    field: 'variant',
+    field: 'variantName',
     required: true,
     align: 'left',
   },
 ];
 
 const variantRows: {
-  variant: string;
+  variantName: string;
 }[] = [...gameDataStore.gameData.ships.values()]
   .filter((s) => s.isVariant && s.baseName === ship.name)
   .map((s) => {
-    return { variant: s.name };
+    return { variantName: s.name };
   });
 
 const attributesColumns: QTableProps['columns'] = [

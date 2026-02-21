@@ -7,10 +7,10 @@
             <ShipPicker
               @select="
                 (ship) => {
-                  if (!ships.find((other) => other.name === ship.name))
-                    updateShips([...ships, ship]);
+                  if (!shipsPageStore.ships.find((other) => other.name === ship.name))
+                    shipsPageStore.ships = [...shipsPageStore.ships, ship];
 
-                  activeTab = ship.name;
+                  shipsPageStore.activeTab = ship.name;
                 }
               "
             />
@@ -19,7 +19,10 @@
 
         <template v-slot:after>
           <div class="q-pa-md full-height flex column no-wrap">
-            <ShipsTabbedViewer v-model:ships="ships" v-model:tab="activeTab" />
+            <ShipsTabbedViewer
+              v-model:ships="shipsPageStore.ships"
+              v-model:tab="shipsPageStore.activeTab"
+            />
           </div>
         </template>
       </q-splitter>
@@ -33,11 +36,9 @@ import { ref } from 'vue';
 import ShipPicker from 'src/components/ShipPicker.vue';
 import ShipsTabbedViewer from 'src/components/ShipsTabbedViewer.vue';
 
-import { useShipArray } from 'src/components/ship_array.ts';
+import { useShipsPageStore } from 'src/stores/ships_page.ts';
 
-const [ships, updateShips] = useShipArray();
+const shipsPageStore = useShipsPageStore();
 
 const splitterModel = ref(33);
-
-const activeTab = ref('');
 </script>
