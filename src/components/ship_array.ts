@@ -3,12 +3,12 @@ import { shallowRef } from 'vue';
 
 import type { Ship } from '@cannedseagull/endless-sky-data-parser';
 
-export function useShipArray(): [ShallowRef<Ship[]>, (ship: Ship) => void] {
+export function useShipArray(): [ShallowRef<Ship[]>, (ships: Ship[]) => void] {
   const state: ShallowRef<Ship[]> = shallowRef([]);
 
-  function push(ship: Ship): void {
-    state.value = [...state.value, ship];
+  function update(ships: Ship[]): void {
+    state.value = ships;
   }
 
-  return [state, push];
+  return [state, update];
 }

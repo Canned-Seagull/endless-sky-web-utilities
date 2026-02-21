@@ -7,7 +7,8 @@
             <ShipPicker
               @select="
                 (ship) => {
-                  if (!ships.find((other) => other.name === ship.name)) pushShips(ship);
+                  if (!ships.find((other) => other.name === ship.name))
+                    updateShips([...ships, ship]);
 
                   activeTab = ship.name;
                 }
@@ -34,7 +35,7 @@ import ShipsTabbedViewer from 'src/components/ShipsTabbedViewer.vue';
 
 import { useShipArray } from 'src/components/ship_array.ts';
 
-const [ships, pushShips] = useShipArray();
+const [ships, updateShips] = useShipArray();
 
 const splitterModel = ref(33);
 
