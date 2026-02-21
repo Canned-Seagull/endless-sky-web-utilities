@@ -3,7 +3,7 @@
     <div class="q-pa-lg" style="height: calc(100vh - 50px)">
       <q-splitter v-model="splitterModel" class="full-height">
         <template v-slot:before>
-          <div class="q-pa-md full-height">
+          <div class="q-pa-md full-height flex column no-wrap">
             <ShipPicker
               @select="
                 (ship) => {
@@ -18,7 +18,7 @@
         </template>
 
         <template v-slot:after>
-          <div class="q-pa-md">
+          <div class="q-pa-md full-height flex column no-wrap">
             <ShipsTabbedViewer v-model:ships="ships" v-model:tab="activeTab" />
           </div>
         </template>

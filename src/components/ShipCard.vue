@@ -1,15 +1,15 @@
 <template>
-  <q-card flat>
-    <q-card-section>
+  <q-card flat class="full-height">
+    <q-card-section class="full-height">
       <q-tabs v-model="panel" align="left" no-caps inline-label>
         <q-tab name="information" icon="query_stats" label="Information" />
         <q-tab name="outfits" icon="handyman" label="Outfits" />
         <q-tab name="raw-stats" icon="analytics" label="Raw Stats" />
         <q-tab name="data" icon="code" label="Data" />
       </q-tabs>
-      <q-tab-panels v-model="panel" animated>
+      <q-tab-panels v-model="panel" animated class="full-height">
         <q-tab-panel name="information">
-          <q-splitter v-model="informationSplitterModel" style="height: 400px">
+          <q-splitter v-model="informationSplitterModel" class="full-height">
             <template v-slot:before>
               <q-img
                 v-if="ship.thumbnail"
@@ -33,7 +33,7 @@
                   rowsPerPage: 0,
                 }"
                 :rows-per-page-options="[0]"
-                style="height: 400px"
+                class="full-height"
               />
             </template>
           </q-splitter>
