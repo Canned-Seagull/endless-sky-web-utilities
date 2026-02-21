@@ -1,6 +1,6 @@
 <template>
   <q-card flat class="full-height">
-    <q-card-section class="full-height">
+    <q-card-section class="full-height flex column no-wrap">
       <q-tabs v-model="panel" align="left" no-caps inline-label>
         <q-tab name="information" icon="query_stats" label="Information" />
         <q-tab name="outfits" icon="handyman" label="Outfits" />
