@@ -4,6 +4,7 @@
       <q-tabs v-model="panel" align="left" no-caps inline-label>
         <q-tab name="information" icon="query_stats" label="Information" />
         <q-tab name="outfits" icon="handyman" label="Outfits" />
+        <q-tab name="variants" icon="alt_route" label="Variants" />
         <q-tab name="raw-stats" icon="analytics" label="Raw Stats" />
         <q-tab name="data" icon="code" label="Data" />
       </q-tabs>
@@ -51,6 +52,22 @@
             :rows-per-page-options="[0]"
             class="full-height"
           />
+        </q-tab-panel>
+        <q-tab-panel name="variants">
+          <q-table
+            v-if="variantRows.length"
+            flat
+            :rows="variantRows"
+            :columns="variantColumns"
+            hide-header
+            virtual-scroll
+            :pagination="{
+              rowsPerPage: 0,
+            }"
+            :rows-per-page-options="[0]"
+            class="full-height"
+          />
+          <div v-else class="absolute-center text-center text-h6">No variants</div>
         </q-tab-panel>
         <q-tab-panel name="raw-stats">
           <q-table title="Attributes" :rows="attributesRows" :columns="attributesColumns" />
@@ -159,6 +176,24 @@ const outfitRows: {
 }[] = [...ship.outfits].map(([outfit, count]) => {
   return { outfit, count };
 });
+
+const variantColumns: QTableProps['columns'] = [
+  {
+    name: 'variant',
+    label: 'Variant',
+    field: 'variant',
+    required: true,
+    align: 'left',
+  },
+];
+
+const variantRows: {
+  variant: string;
+}[] = [...gameDataStore.gameData.ships.values()]
+  .filter((s) => s.isVariant && s.baseName === ship.name)
+  .map((s) => {
+    return { variant: s.name };
+  });
 
 const attributesColumns: QTableProps['columns'] = [
   {
