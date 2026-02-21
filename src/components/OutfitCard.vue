@@ -1,12 +1,12 @@
 <template>
   <q-card flat class="full-height">
-    <q-card-section class="full-height flex column no-wrap">
+    <q-card-section class="full-height flex column no-wrap q-pa-none">
       <q-tabs v-model="panel" align="left" no-caps inline-label>
         <q-tab name="information" icon="query_stats" label="Information" />
         <q-tab name="raw-stats" icon="analytics" label="Raw Stats" />
         <q-tab name="data" icon="code" label="Data" />
       </q-tabs>
-      <q-tab-panels v-model="panel" animated class="full-height">
+      <q-tab-panels v-model="panel" animated class="full-height q-pa-none">
         <q-tab-panel name="information">
           <q-splitter v-model="informationSplitterModel" style="height: 400px" class="full-height">
             <template v-slot:before>
