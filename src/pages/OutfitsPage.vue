@@ -7,10 +7,10 @@
             <OutfitPicker
               @select="
                 (outfit) => {
-                  if (!outfits.find((other) => other.name === outfit.name))
-                    outfits = [...outfits, outfit];
+                  if (!outfitsPageStore.outfits.find((other) => other.name === outfit.name))
+                    outfitsPageStore.outfits = [...outfitsPageStore.outfits, outfit];
 
-                  activeTab = outfit.name ?? '';
+                  outfitsPageStore.activeTab = outfit.name ?? '';
                 }
               "
             />
@@ -19,7 +19,10 @@
 
         <template v-slot:after>
           <div class="q-pa-md full-height flex column no-wrap">
-            <OutfitsTabbedViewer v-model:outfits="outfits" v-model:tab="activeTab" />
+            <OutfitsTabbedViewer
+              v-model:outfits="outfitsPageStore.outfits"
+              v-model:tab="outfitsPageStore.activeTab"
+            />
           </div>
         </template>
       </q-splitter>
@@ -28,17 +31,14 @@
 </template>
 
 <script setup lang="ts">
-import type { ShallowRef } from 'vue';
-import { ref, shallowRef } from 'vue';
+import { ref } from 'vue';
 
-import type { Outfit } from '@cannedseagull/endless-sky-data-parser';
+import { useOutfitsPageStore } from 'src/stores/outfits_page.ts';
 
 import OutfitPicker from 'src/components/OutfitPicker.vue';
 import OutfitsTabbedViewer from 'src/components/OutfitsTabbedViewer.vue';
 
-const outfits: ShallowRef<Outfit[]> = shallowRef([]);
+const outfitsPageStore = useOutfitsPageStore();
 
 const splitterModel = ref(33);
-
-const activeTab = ref('');
 </script>

@@ -41,6 +41,16 @@
         </q-tab-panel>
         <q-tab-panel name="outfits">
           <q-table
+            @row-click="
+              (_, { outfitName }) => {
+                const outfit = gameDataStore.gameData.outfits.get(outfitName);
+                if (!outfit || !outfit.name) return;
+
+                outfitsPageStore.outfits = [...outfitsPageStore.outfits, outfit];
+                outfitsPageStore.activeTab = outfit.name;
+                router.push('/outfits');
+              }
+            "
             flat
             :rows="outfitRows"
             :columns="outfitColumns"
@@ -86,12 +96,14 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import type { QTableProps } from 'quasar';
 
 import type { Ship } from '@cannedseagull/endless-sky-data-parser';
 import { serialiseDataNode } from '@cannedseagull/endless-sky-data-parser';
 
 import { useGameDataStore } from 'src/stores/game_data.ts';
+import { useOutfitsPageStore } from 'src/stores/outfits_page.ts';
 
 export interface ShipCardProps {
   ship: Ship;
@@ -99,7 +111,10 @@ export interface ShipCardProps {
 
 const { ship } = defineProps<ShipCardProps>();
 
+const router = useRouter();
+
 const gameDataStore = useGameDataStore();
+const outfitsPageStore = useOutfitsPageStore();
 
 const panel = ref('information');
 const informationSplitterModel = ref(50);
@@ -157,7 +172,7 @@ const outfitColumns: QTableProps['columns'] = [
   {
     name: 'outfit',
     label: 'Outfit',
-    field: 'outfit',
+    field: 'outfitName',
     required: true,
     align: 'left',
   },
@@ -171,10 +186,10 @@ const outfitColumns: QTableProps['columns'] = [
 ];
 
 const outfitRows: {
-  outfit: string;
+  outfitName: string;
   count: number;
-}[] = [...ship.outfits].map(([outfit, count]) => {
-  return { outfit, count };
+}[] = [...ship.outfits].map(([outfitName, count]) => {
+  return { outfitName, count };
 });
 
 const variantColumns: QTableProps['columns'] = [
