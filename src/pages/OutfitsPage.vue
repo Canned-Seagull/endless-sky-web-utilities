@@ -1,39 +1,44 @@
 <template>
   <q-page>
-    <div class="q-ma-lg">
-      <div
-        v-for="outfit in Array.from(gameDataStore.gameData.outfits.values())
-          .filter((outfit) => outfit.isInitialised)
-          .sort((a, b) => {
-            const aName = a.name ?? '';
-            const bName = b.name ?? '';
+    <div class="q-pa-lg" style="height: calc(100vh - 50px)">
+      <q-splitter v-model="splitterModel" class="full-height">
+        <template v-slot:before>
+          <div class="q-pa-md full-height">
+            <OutfitPicker
+              @select="
+                (outfit) => {
+                  if (!outfits.find((other) => other.name === outfit.name))
+                    outfits = [...outfits, outfit];
 
-            if (aName < bName) return -1;
-            else if (aName > bName) return 1;
+                  activeTab = outfit.name ?? '';
+                }
+              "
+            />
+          </div>
+        </template>
 
-            return 0;
-          })"
-        :key="outfit.name ?? ''"
-        :outfit
-        class="q-my-md"
-      >
-        <OutfitCard :outfit />
-      </div>
-    </div>
-
-    <div
-      v-if="gameDataStore.gameData.outfits.size === 0"
-      class="absolute-center text-center text-h6"
-    >
-      No outfits loaded yet
+        <template v-slot:after>
+          <div class="q-pa-md">
+            <OutfitsTabbedViewer v-model:outfits="outfits" v-model:tab="activeTab" />
+          </div>
+        </template>
+      </q-splitter>
     </div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { useGameDataStore } from 'src/stores/game_data.ts';
+import type { ShallowRef } from 'vue';
+import { ref, shallowRef } from 'vue';
 
-import OutfitCard from 'src/components/OutfitCard.vue';
+import type { Outfit } from '@cannedseagull/endless-sky-data-parser';
 
-const gameDataStore = useGameDataStore();
+import OutfitPicker from 'src/components/OutfitPicker.vue';
+import OutfitsTabbedViewer from 'src/components/OutfitsTabbedViewer.vue';
+
+const outfits: ShallowRef<Outfit[]> = shallowRef([]);
+
+const splitterModel = ref(33);
+
+const activeTab = ref('');
 </script>
