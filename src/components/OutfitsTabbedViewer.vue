@@ -32,7 +32,7 @@
       </q-tab-panel>
     </q-tab-panels>
   </div>
-  <div v-else class="absolute-center text-center text-h6">No ships opened yet</div>
+  <div v-else class="absolute-center text-center text-h6">No outfits opened yet</div>
 </template>
 
 <script setup lang="ts">
